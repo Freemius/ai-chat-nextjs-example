@@ -1,0 +1,102 @@
+import Image from 'next/image';
+import Link from 'next/link';
+import FSLogoFull from '@/components/fs-logo-full';
+import { Button } from '@/components/ui/button';
+import FSSymbol from '@/components/fs-symbol';
+import { IconSignRight } from '@tabler/icons-react';
+
+export default function Home() {
+    return (
+        <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+            <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start max-w-4xl">
+                <div className="flex items-end gap-4">
+                    <a href="https://freemius.com/help/documentation/saas-sdk/js-sdk/">
+                        <FSLogoFull className="h-12 w-auto" />
+                        <span className="text-2xl font-bold translate-y-[3px]">JavaScript SDK</span>
+                    </a>
+                </div>
+
+                <div className="text-center sm:text-left">
+                    <h1 className="text-4xl sm:text-6xl font-bold mb-6">
+                        Complete SaaS Integration <br />
+                        <span className="text-grow">Made Simple</span>
+                    </h1>
+                    <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mb-8">
+                        Experience a full-featured demonstration of the Freemius JS SDK. See how to implement checkout
+                        flows, webhook handling, subscription management, and credit-based billing in a modern Next.js
+                        application.
+                    </p>
+                </div>
+
+                <div className="flex gap-4 items-center flex-col sm:flex-row w-full sm:w-auto">
+                    <Button variant="default" asChild>
+                        <span>
+                            <IconSignRight size={16} />
+                            <Link href="/chat">Start Demonstration</Link>
+                        </span>
+                    </Button>
+                </div>
+
+                <div className="mt-8">
+                    <h2 className="text-2xl font-semibold mb-4">What You&apos;ll Experience:</h2>
+                    <div className="prose max-w-2xl">
+                        <p>
+                            We will be making a very simple UI clone of a famous AI chat app, but with a focus on the
+                            Freemius Node.js SDK integration. The UX flow will be as follows:
+                        </p>
+                        <ul>
+                            <li>
+                                <strong>Dummy AI Chat</strong> - A dummy UI featuring a AI chat app.
+                            </li>
+                            <li>
+                                <strong>PayWall</strong> - A popup to register and/or pay when interacting with the AI
+                                app.
+                            </li>
+                            <li>
+                                <strong>Checkout</strong> - Freemius Checkout in overlay mode to help with the
+                                subscription.
+                            </li>
+                            <li>
+                                <strong>Purchase API</strong> - Usage of the <code>freemius.purchase</code> from the SDK
+                                to easily get all information of a purchase and sync with your app.
+                            </li>
+                            <li>
+                                <strong>Webhook</strong> - Handle purchase upgrades/downgrades asynchronously via the
+                                <code>freemius.webhook.createListener()</code> from the SDK.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </main>
+            <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+                <a
+                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+                    href="https://freemius.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <FSSymbol className="h-4 w-4" />
+                    Freemius.com
+                </a>
+                <a
+                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+                    href="https://freemius.com/help/documentation/saas/saas-integration/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <Image aria-hidden src="/file.svg" alt="File icon" width={16} height={16} />
+                    Documentation
+                </a>
+                <a
+                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+                    href="https://github.com/Freemius/freemius-node"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <Image aria-hidden src="/window.svg" alt="Window icon" width={16} height={16} />
+                    GitHub Repository
+                </a>
+            </footer>
+        </div>
+    );
+}

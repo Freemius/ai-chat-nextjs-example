@@ -1,6 +1,6 @@
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
-import { deductCredits, getUserEntitlement, hasCredits } from '@/lib/user-entitlement';
+import { deductCredits } from '@/lib/user-entitlement';
 import { getAiResponse } from '@/lib/ai';
 
 export async function POST(request: Request) {
@@ -15,29 +15,6 @@ export async function POST(request: Request) {
                 message: 'You must be logged in to use this feature.',
             },
             { status: 401 }
-        );
-    }
-
-    // We assume an active license is needed regardless of the credit balance.
-    const entitlement = await getUserEntitlement(session.user.id);
-
-    if (!entitlement) {
-        return Response.json(
-            {
-                code: 'no_active_purchase',
-                message: 'You do not have an active license to use this feature.',
-            },
-            { status: 403 }
-        );
-    }
-
-    if (!(await hasCredits(session.user.id, 100))) {
-        return Response.json(
-            {
-                code: 'insufficient_credits',
-                message: 'You do not have enough credits to use this feature.',
-            },
-            { status: 403 }
         );
     }
 

@@ -36,25 +36,15 @@ const data = {
         },
     ],
     navFooterLoggedIn: [
-        {
-            title: 'Billing & Payments',
-            url: '/billing',
-            icon: IconReceipt,
-        },
+        // {
+        //     title: 'Billing & Payments',
+        //     url: '/billing',
+        //     icon: IconReceipt,
+        // },
         {
             title: 'Credits & Topups',
             url: '/credits',
             icon: IconCoins,
-        },
-        {
-            title: 'Purchase Demo',
-            url: '/purchase',
-            icon: IconShoppingBagPlus,
-        },
-        {
-            title: 'Paywall Demo',
-            url: '/paywall',
-            icon: IconShieldHeart,
         },
     ],
     navFooterLoggedOut: [

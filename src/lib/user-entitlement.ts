@@ -72,6 +72,35 @@ export const getFsUser: UserRetriever = async () => {
     return freemius.entitlement.getFsUser(entitlement, email);
 };
 
+export async function syncEntitlementFromWebhook(fsLicenseId: string): Promise<void> {
+    const purchaseInfo = await freemius.purchase.retrievePurchase(fsLicenseId);
+    if (purchaseInfo) {
+        await processPurchaseInfo(purchaseInfo);
+    }
+}
+
+export async function deleteEntitlement(fsLicenseId: string): Promise<void> {
+    await prisma.userFsEntitlement.delete({
+        where: { fsLicenseId: fsLicenseId },
+    });
+}
+
+export async function renewCreditsFromWebhook(fsLicenseId: string): Promise<void> {
+    const purchaseInfo = await freemius.purchase.retrievePurchase(fsLicenseId);
+
+    if (purchaseInfo) {
+        const credits = getCreditsForPurchase(purchaseInfo);
+
+        const entitlement = await prisma.userFsEntitlement.findUnique({
+            where: { fsLicenseId },
+        });
+
+        if (entitlement && credits > 0) {
+            await addCredits(entitlement.userId, credits);
+        }
+    }
+}
+
 //#endregion
 
 // #region Credit & Entitlement Management

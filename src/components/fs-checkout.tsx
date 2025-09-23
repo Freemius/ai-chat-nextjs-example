@@ -2,7 +2,7 @@
 
 import { CheckoutProvider } from '@/react-starter/components/checkout-provider';
 import { CheckoutSerialized } from '@freemius/sdk';
-import { IconCircleCheck, IconAlertCircle } from '@tabler/icons-react';
+import { IconCircleCheck } from '@tabler/icons-react';
 import * as React from 'react';
 import { toast } from 'sonner';
 

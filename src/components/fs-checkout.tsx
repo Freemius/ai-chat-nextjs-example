@@ -5,6 +5,7 @@ import { CheckoutSerialized } from '@freemius/sdk';
 import { IconCircleCheck } from '@tabler/icons-react';
 import * as React from 'react';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const handlePurchase = () => {
     toast.success(`Purchase successful`, {
@@ -12,10 +13,18 @@ const handlePurchase = () => {
         description: 'You can now use the feature you just purchased.',
     });
 };
+
 export default function FSCheckoutProvider(props: { children: React.ReactNode; checkout: CheckoutSerialized }) {
+    const router = useRouter();
+
+    const onAfterSync = React.useCallback(() => {
+        handlePurchase();
+        router.refresh();
+    }, [router]);
+
     return (
         <CheckoutProvider
-            onAfterSync={handlePurchase}
+            onAfterSync={onAfterSync}
             checkout={props.checkout}
             endpoint={process.env.NEXT_PUBLIC_APP_URL! + '/api/checkout'}
         >

@@ -80,7 +80,7 @@ export default function Home() {
                 </a>
                 <a
                     className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                    href="https://freemius.com/help/documentation/saas/saas-integration/"
+                    href="https://freemius.com/help/documentation/saas-sdk/"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -89,7 +89,7 @@ export default function Home() {
                 </a>
                 <a
                     className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                    href="https://github.com/Freemius/freemius-node"
+                    href="https://github.com/Freemius/nextjs-starter"
                     target="_blank"
                     rel="noopener noreferrer"
                 >

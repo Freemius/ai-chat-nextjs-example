@@ -12,12 +12,7 @@ export function SiteHeader(props: { title: ReactNode }) {
                 <h1 className="text-base font-medium">{props.title}</h1>
                 <div className="ml-auto flex items-center gap-2">
                     <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
-                        <a
-                            href="https://github.com/Freemius/freemius-node/tree/main/examples/nextjs-app"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                            className="dark:text-foreground"
-                        >
+                        <a href="https://github.com/Freemius/nextjs-starter" rel="noopener noreferrer" target="_blank">
                             GitHub
                         </a>
                     </Button>

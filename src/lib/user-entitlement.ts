@@ -8,9 +8,101 @@
  * 3. The user also has a `credits` field that tracks the user's credits.
  */
 import { prisma } from '@/lib/prisma';
-import { User } from '@generated/prisma';
+import { PurchaseInfo, UserRetriever } from '@freemius/sdk';
+import { User, UserFsEntitlement } from '@generated/prisma';
+import { auth } from './auth';
+import { headers } from 'next/headers';
+import { freemius } from './freemius';
 
 // #region Freemius SDK Supporting Functions for User Entitlements
+
+export async function processPurchaseInfo(fsPurchase: PurchaseInfo): Promise<void> {
+    const user = await getUserByEmail(fsPurchase.email);
+
+    if (!user) {
+        return;
+    }
+
+    const credit = await processEntitlementFromPurchase(user, fsPurchase);
+
+    if (credit > 0) {
+        await addCredits(user.id, credit);
+    }
+}
+
+function getCreditsForPurchase(fsPurchase: PurchaseInfo): number {
+    const credits = resourceRecord[pricingToResourceMap[fsPurchase.pricingId]] ?? 0;
+
+    // Return sum total of 12 months of credits if annual billing cycle
+    return fsPurchase.isAnnual() ? credits * 12 : credits;
+}
+
+async function processEntitlementFromPurchase(user: User, fsPurchase: PurchaseInfo): Promise<number> {
+    let credits = 0;
+
+    const isExisting = await prisma.userFsEntitlement.findUnique({
+        where: { fsLicenseId: fsPurchase.licenseId },
+    });
+
+    if (!isExisting) {
+        credits = getCreditsForPurchase(fsPurchase);
+    }
+
+    // Save purchase info in our DB
+    await prisma.userFsEntitlement.upsert({
+        where: { fsLicenseId: fsPurchase.licenseId },
+        create: fsPurchase.toEntitlementRecord({ userId: user.id }),
+        update: fsPurchase.toEntitlementRecord(),
+    });
+
+    return credits;
+}
+
+export async function getUserEntitlement(userId: string): Promise<UserFsEntitlement | null> {
+    const entitlements = await prisma.userFsEntitlement.findMany({ where: { userId, type: 'subscription' } });
+
+    return freemius.entitlement.getActive(entitlements);
+}
+
+export const getFsUser: UserRetriever = async () => {
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+
+    const entitlement = session ? await getUserEntitlement(session.user.id) : null;
+    const email = session?.user.email ?? undefined;
+
+    return freemius.entitlement.getFsUser(entitlement, email);
+};
+
+export async function syncEntitlementFromWebhook(fsLicenseId: string): Promise<void> {
+    const purchaseInfo = await freemius.purchase.retrievePurchase(fsLicenseId);
+    if (purchaseInfo) {
+        await processPurchaseInfo(purchaseInfo);
+    }
+}
+
+export async function deleteEntitlement(fsLicenseId: string): Promise<void> {
+    await prisma.userFsEntitlement.delete({
+        where: { fsLicenseId: fsLicenseId },
+    });
+}
+
+export async function renewCreditsFromWebhook(fsLicenseId: string): Promise<void> {
+    const purchaseInfo = await freemius.purchase.retrievePurchase(fsLicenseId);
+
+    if (purchaseInfo) {
+        const credits = getCreditsForPurchase(purchaseInfo);
+
+        const entitlement = await prisma.userFsEntitlement.findUnique({
+            where: { fsLicenseId },
+        });
+
+        if (entitlement && credits > 0) {
+            await addCredits(entitlement.userId, credits);
+        }
+    }
+}
 
 //#endregion
 

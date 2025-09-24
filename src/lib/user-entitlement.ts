@@ -31,7 +31,10 @@ export async function processPurchaseInfo(fsPurchase: PurchaseInfo): Promise<voi
 }
 
 function getCreditsForPurchase(fsPurchase: PurchaseInfo): number {
-    return resourceRecord[pricingToResourceMap[fsPurchase.pricingId]] ?? 0;
+    const credits = resourceRecord[pricingToResourceMap[fsPurchase.pricingId]] ?? 0;
+
+    // Return sum total of 12 months of credits if annual billing cycle
+    return fsPurchase.isAnnual() ? credits * 12 : credits;
 }
 
 async function processEntitlementFromPurchase(user: User, fsPurchase: PurchaseInfo): Promise<number> {

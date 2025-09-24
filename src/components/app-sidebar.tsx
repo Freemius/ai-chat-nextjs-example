@@ -36,11 +36,11 @@ const data = {
         },
     ],
     navFooterLoggedIn: [
-        // {
-        //     title: 'Billing & Payments',
-        //     url: '/billing',
-        //     icon: IconReceipt,
-        // },
+        {
+            title: 'Billing & Payments',
+            url: '/billing',
+            icon: IconReceipt,
+        },
         {
             title: 'Credits & Topups',
             url: '/credits',

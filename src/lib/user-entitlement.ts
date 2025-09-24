@@ -30,6 +30,23 @@ export async function processPurchaseInfo(fsPurchase: PurchaseInfo): Promise<voi
     }
 }
 
+export async function getUserEntitlement(userId: string): Promise<UserFsEntitlement | null> {
+    const entitlements = await prisma.userFsEntitlement.findMany({ where: { userId, type: 'subscription' } });
+
+    return freemius.entitlement.getActive(entitlements);
+}
+
+export const getFsUser: UserRetriever = async () => {
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+
+    const entitlement = session ? await getUserEntitlement(session.user.id) : null;
+    const email = session?.user.email ?? undefined;
+
+    return freemius.entitlement.getFsUser(entitlement, email);
+};
+
 function getCreditsForPurchase(fsPurchase: PurchaseInfo): number {
     const credits = resourceRecord[pricingToResourceMap[fsPurchase.pricingId]] ?? 0;
 
@@ -57,23 +74,6 @@ async function processEntitlementFromPurchase(user: User, fsPurchase: PurchaseIn
 
     return credits;
 }
-
-export async function getUserEntitlement(userId: string): Promise<UserFsEntitlement | null> {
-    const entitlements = await prisma.userFsEntitlement.findMany({ where: { userId, type: 'subscription' } });
-
-    return freemius.entitlement.getActive(entitlements);
-}
-
-export const getFsUser: UserRetriever = async () => {
-    const session = await auth.api.getSession({
-        headers: await headers(),
-    });
-
-    const entitlement = session ? await getUserEntitlement(session.user.id) : null;
-    const email = session?.user.email ?? undefined;
-
-    return freemius.entitlement.getFsUser(entitlement, email);
-};
 
 export async function syncEntitlementFromWebhook(fsLicenseId: string): Promise<void> {
     const purchaseInfo = await freemius.purchase.retrievePurchase(fsLicenseId);

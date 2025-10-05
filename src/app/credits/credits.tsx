@@ -1,10 +1,10 @@
 'use client';
 
-import { Subscribe } from '@/react-starter/components/subscribe';
+import { Topup } from '@/react-starter/components/topup';
 import { formatNumber } from '@/react-starter/utils/formatter';
 
-export default function Credits(props: { credits?: number; hasSubscription: boolean }) {
-    const { credits, hasSubscription } = props;
+export default function Credits(props: { credits?: number }) {
+    const { credits } = props;
 
     const info = (
         <div className="text-center">
@@ -13,5 +13,5 @@ export default function Credits(props: { credits?: number; hasSubscription: bool
         </div>
     );
 
-    return <Subscribe>{info}</Subscribe>;
+    return <Topup>{info}</Topup>;
 }

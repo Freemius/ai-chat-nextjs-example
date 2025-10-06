@@ -1,6 +1,26 @@
-# Freemius Next.js SaaS Starter Kit
+<div align="center">
 
-The application made in Next.js has the following structure:
+# 🚀 Freemius Next.js AI Example App
+
+> **A complete SaaS template with authentication, subscriptions, and AI chat features**
+
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-6-2D3748?logo=prisma)](https://www.prisma.io/)
+[![Better Auth](https://img.shields.io/badge/Better--Auth-1-blue)](https://www.better-auth.com/)
+[![Freemius](https://img.shields.io/badge/Freemius-SaaS-green)](https://freemius.com/)
+
+📚 **[Official Documentation](https://freemius.com/help/documentation/saas-sdk/framework/nextjs/)** 📚
+
+> **💳 Flexible Pricing Model** - Supports both recurring subscriptions and one-time credit top-ups for maximum
+> monetization flexibility.
+
+</div>
+
+---
+
+## ✨ Features
+
+This powerful Next.js SaaS application includes:
 
 1. Uses [Better-Auth](https://www.better-auth.com/) for authentication and user management.
 2. Uses [Prisma](https://www.prisma.io/) as the ORM to interact with the database.

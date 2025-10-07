@@ -17,34 +17,15 @@ import { freemius } from './freemius';
 // #region Freemius SDK Supporting Functions for User Entitlements
 
 export async function processPurchaseInfo(fsPurchase: PurchaseInfo): Promise<void> {
-    const user = await getUserByEmail(fsPurchase.email);
-
-    if (!user) {
-        return;
-    }
-
-    const credit = await processEntitlementFromPurchase(user, fsPurchase);
-
-    if (credit > 0) {
-        await addCredits(user.id, credit);
-    }
+    // Todo: fill me
 }
 
 export async function getUserEntitlement(userId: string): Promise<UserFsEntitlement | null> {
-    const entitlements = await prisma.userFsEntitlement.findMany({ where: { userId, type: 'subscription' } });
-
-    return freemius.entitlement.getActive(entitlements);
+    // Todo: fill me
 }
 
 export const getFsUser: UserRetriever = async () => {
-    const session = await auth.api.getSession({
-        headers: await headers(),
-    });
-
-    const entitlement = session ? await getUserEntitlement(session.user.id) : null;
-    const email = session?.user.email ?? undefined;
-
-    return freemius.entitlement.getFsUser(entitlement, email);
+    // Todo: fill me
 };
 
 function getCreditsForPurchase(fsPurchase: PurchaseInfo): number {

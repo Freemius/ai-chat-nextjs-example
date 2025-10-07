@@ -46,13 +46,6 @@ async function getCreditsForUserPurchase(user: User, fsPurchase: PurchaseInfo): 
         credits = getEntitledCredits(fsPurchase);
     }
 
-    // Save purchase info in our DB
-    await prisma.userFsEntitlement.upsert({
-        where: { fsLicenseId: fsPurchase.licenseId },
-        create: fsPurchase.toEntitlementRecord({ userId: user.id }),
-        update: fsPurchase.toEntitlementRecord(),
-    });
-
     return credits;
 }
 

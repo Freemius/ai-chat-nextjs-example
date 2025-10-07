@@ -28,14 +28,14 @@ export const getFsUser: UserRetriever = async () => {
     // Todo: fill me
 };
 
-function getCreditsForPurchase(fsPurchase: PurchaseInfo): number {
+function getEntitledCredits(fsPurchase: PurchaseInfo): number {
     const credits = resourceRecord[pricingToResourceMap[fsPurchase.pricingId]] ?? 0;
 
     // Return sum total of 12 months of credits if annual billing cycle
     return fsPurchase.isAnnual() ? credits * 12 : credits;
 }
 
-async function processEntitlementFromPurchase(user: User, fsPurchase: PurchaseInfo): Promise<number> {
+async function getCreditsForUserPurchase(user: User, fsPurchase: PurchaseInfo): Promise<number> {
     let credits = 0;
 
     const isExisting = await prisma.userFsEntitlement.findUnique({
@@ -43,7 +43,7 @@ async function processEntitlementFromPurchase(user: User, fsPurchase: PurchaseIn
     });
 
     if (!isExisting) {
-        credits = getCreditsForPurchase(fsPurchase);
+        credits = getEntitledCredits(fsPurchase);
     }
 
     // Save purchase info in our DB
@@ -73,7 +73,7 @@ export async function renewCreditsFromWebhook(fsLicenseId: string): Promise<void
     const purchaseInfo = await freemius.purchase.retrievePurchase(fsLicenseId);
 
     if (purchaseInfo) {
-        const credits = getCreditsForPurchase(purchaseInfo);
+        const credits = getEntitledCredits(purchaseInfo);
 
         const entitlement = await prisma.userFsEntitlement.findUnique({
             where: { fsLicenseId },

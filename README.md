@@ -2,19 +2,25 @@
 
 # 🚀 Freemius Next.js AI Example App
 
-> **A complete SaaS template with authentication, subscriptions, and AI chat features**
+**A complete SaaS template with authentication, subscriptions, and AI chat features**
+
+📚 **[Official Documentation](https://freemius.com/help/documentation/saas-sdk/framework/nextjs/)** 📚
 
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-6-2D3748?logo=prisma)](https://www.prisma.io/)
 [![Better Auth](https://img.shields.io/badge/Better--Auth-1-blue)](https://www.better-auth.com/)
 [![Freemius](https://img.shields.io/badge/Freemius-SaaS-green)](https://freemius.com/)
 
-📚 **[Official Documentation](https://freemius.com/help/documentation/saas-sdk/framework/nextjs/)** 📚
+**💳 Flexible Pricing Model**
 
-> **💳 Flexible Pricing Model** - Supports both recurring subscriptions and one-time credit top-ups for maximum
-> monetization flexibility.
+Supports both recurring subscriptions and one-time credit top-ups for maximum monetization flexibility.
 
 </div>
+
+**Coming from the [webinar](https://freemius.com/build-and-monetize-your-saas-webinar/)?**
+
+- Recording link will be updated soon.
+- The code changes can be tracked via [this pull request](https://github.com/Freemius/ai-chat-nextjs-example/pull/2).
 
 ---
 

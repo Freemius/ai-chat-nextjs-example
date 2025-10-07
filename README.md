@@ -11,6 +11,8 @@ _Supports both recurring subscriptions and one-time credit top-ups for maximum m
 [![Better Auth](https://img.shields.io/badge/Better--Auth-1-blue)](https://www.better-auth.com/)
 [![Freemius](https://img.shields.io/badge/Freemius-SaaS-green)](https://freemius.com/)
 
+---
+
 📚 **[Official Documentation](https://freemius.com/help/documentation/saas-sdk/framework/nextjs/)** 📚
 
 </div>
@@ -24,34 +26,35 @@ _Supports both recurring subscriptions and one-time credit top-ups for maximum m
 
 ## ✨ Features
 
-This powerful Next.js SaaS application includes:
+This Next.js SaaS application is a battery-included template that demonstrates how to build a SaaS application with:
 
-1. Uses [Better-Auth](https://www.better-auth.com/) for authentication and user management.
-2. Uses [Prisma](https://www.prisma.io/) as the ORM to interact with the database.
-3. Integrates with [Freemius](https://freemius.com/) for handling subscriptions, one-off purchases, and customer
-   portals.
+1. [Better-Auth](https://www.better-auth.com/) for authentication and user management.
+2. [Prisma](https://www.prisma.io/) as the ORM to interact with the database.
+3. [Freemius](https://freemius.com/) for handling subscriptions, one-off purchases, and rendering customer portal for
+   self billing management.
 
 ## Understanding the flow of the application
 
 1. The application demos an AI chat bot where users can chat with the bot and consume credits for each message.
 1. The application will work without signing in.
 1. If you try to use the chat bot without signing in, you will be prompted to sign in or sign up.
-1. Once signed in, you will start with a free trial of 100 credits.
+1. Once signed in, you will start with a free trial of 150 credits.
 1. You can then choose to subscribe to a plan or top-up your credits using the paywall.
 1. The application will manage your entitlements based on your subscriptions and purchases.
 1. You can manage your subscriptions and view your purchase history in the customer portal.
 
 ## Understanding the Pricing Model
 
-You need to create a SaaS product in Freemius to get the required API keys and set up your pricing plans.
+You need to create a [SaaS product in Freemius](https://freemius.com/help/documentation/saas/saas-plans-pricing/) to get
+the required API keys and set up your pricing plans.
 
 ### Subscription Plans
 
 We will have the following three plans for subscriptions:
 
-1. Starter: 4.99 USD/month or 49.99 USD/year
-2. Professional: 12.99 USD/month or 129.99 USD/year
-3. Business: 24.99 USD/month or 249.99 USD/year
+1. Starter: `$4.99` USD/month or `$47.88` USD/year
+2. Professional: `$12.99` USD/month or `$131.88` USD/year
+3. Business: `$24.99` USD/month or `$239.88` USD/year
 
 Each subscription will come with it's own entitlement managed by the SaaS application.
 
@@ -59,9 +62,9 @@ Each subscription will come with it's own entitlement managed by the SaaS applic
 
 Additionally we will have a one-off purchase plan for credit top-ups with the following quotas:
 
-1. 1000 Credits: 8 USD
-2. 5000 Credits: 30 USD
-3. 10000 Credits: 50 USD
+1. `1,000` Credits: `$8` USD
+2. `5,000` Credits: `$30` USD
+3. `10,000` Credits: `$50` USD
 
 Now go to the Freemius Dashboard and create a new SaaS product with the above pricing plans. Make sure to note down the
 pricing IDs as we will need them later.
@@ -97,10 +100,15 @@ npm ci
 npm run dev
 ```
 
-The application should now be running at `http://localhost:3001`.
+The application should now be running at `http://localhost:3002`.
 
 To reset the local DB of the application, you can use:
 
 ```bash
 npx prisma migrate reset
 ```
+
+**Notice**: Do note that Freemius
+[by default allows one active subscription per product per user](https://freemius.com/help/documentation/saas/saas-integration/#restricting-or-relaxing-single-subscription-per-user)
+(which is configurable). While testing you can cancel the active subscription from the Developer Dashboard or relax the
+configuration.

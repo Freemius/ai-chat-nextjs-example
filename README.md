@@ -21,8 +21,12 @@ _Supports both recurring subscriptions and one-time credit top-ups for maximum m
 
 **Coming from the [webinar](https://freemius.com/build-and-monetize-your-saas-webinar/)?**
 
+- Follow the [official documentation](https://freemius.com/help/documentation/saas-sdk/framework/nextjs/) for the most
+  up-to-date instructions.
 - Recording link will be updated soon.
 - The code changes can be tracked via [this pull request](https://github.com/Freemius/ai-chat-nextjs-example/pull/2).
+
+![Demo Screenshot](./awesome-ai-chat-app.png)
 
 ## ✨ Features
 
@@ -112,3 +116,16 @@ npx prisma migrate reset
 [by default allows one active subscription per product per user](https://freemius.com/help/documentation/saas/saas-integration/#restricting-or-relaxing-single-subscription-per-user)
 (which is configurable). While testing you can cancel the active subscription from the Developer Dashboard or relax the
 configuration.
+
+## Deployment
+
+Here's a one-click deployment option using Vercel:
+
+[Deploy with Vercel](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FFreemius%2Fai-chat-nextjs-example%2Ftree%2Fmain&template=nextjs)
+
+**Note**: Make sure to set the environment variables in Vercel as well.
+
+For hosting the database you can use [Supabase](https://supabase.com/database) or any other Postgres hosting provider.
+
+For more details on deployment, check out the
+[official documentation](https://nextjs.org/docs/app/getting-started/deploying).

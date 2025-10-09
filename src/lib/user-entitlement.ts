@@ -14,7 +14,7 @@ import { freemius } from './freemius';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 
-// #region Freemius SDK Supporting Functions for User Entitlements
+// #region Freemius SDK Supporting Functions for User Entitlements & Webhooks
 
 /**
  * Process the purchase info and update the local database.
@@ -36,6 +36,17 @@ export async function processPurchaseInfo(fsPurchase: PurchaseInfo): Promise<voi
 }
 
 /**
+ * Get the user's entitlement.
+ *
+ * @returns The user's active entitlement or null if the user does not have an active entitlement.
+ */
+export async function getUserEntitlement(userId: string): Promise<UserFsEntitlement | null> {
+    const entitlements = await prisma.userFsEntitlement.findMany({ where: { userId, type: 'subscription' } });
+
+    return freemius.entitlement.getActive(entitlements);
+}
+
+/**
  * Get the Freemius user for the current session.
  *
  * This is used by the Freemius SDK to identify the user.
@@ -52,6 +63,18 @@ export const getFsUser: UserRetriever = async () => {
 
     return freemius.entitlement.getFsUser(entitlement, email);
 };
+
+export async function deleteEntitlement(fsLicenseId: string): Promise<void> {
+    await prisma.userFsEntitlement.delete({ where: { fsLicenseId: fsLicenseId } });
+}
+
+export async function processRedirect(info: CheckoutRedirectInfo): Promise<void> {
+    const purchaseInfo = await freemius.purchase.retrievePurchase(info.license_id);
+
+    if (purchaseInfo) {
+        await processPurchaseInfo(purchaseInfo);
+    }
+}
 
 export async function syncEntitlementFromWebhook(fsLicenseId: string): Promise<void> {
     const purchaseInfo = await freemius.purchase.retrievePurchase(fsLicenseId);
@@ -73,29 +96,6 @@ export async function renewCreditsFromWebhook(fsLicenseId: string): Promise<void
         if (entitlement && credits > 0) {
             await addCredits(entitlement.userId, credits);
         }
-    }
-}
-
-/**
- * Get the user's entitlement.
- *
- * @returns The user's active entitlement or null if the user does not have an active entitlement.
- */
-export async function getUserEntitlement(userId: string): Promise<UserFsEntitlement | null> {
-    const entitlements = await prisma.userFsEntitlement.findMany({ where: { userId, type: 'subscription' } });
-
-    return freemius.entitlement.getActive(entitlements);
-}
-
-export async function deleteEntitlement(fsLicenseId: string): Promise<void> {
-    await prisma.userFsEntitlement.delete({ where: { fsLicenseId: fsLicenseId } });
-}
-
-export async function processRedirect(info: CheckoutRedirectInfo): Promise<void> {
-    const purchaseInfo = await freemius.purchase.retrievePurchase(info.license_id);
-
-    if (purchaseInfo) {
-        await processPurchaseInfo(purchaseInfo);
     }
 }
 

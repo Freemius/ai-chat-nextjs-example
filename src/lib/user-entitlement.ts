@@ -8,7 +8,7 @@
  * 3. The user also has a `credits` field that tracks the user's credits.
  */
 import { prisma } from '@/lib/prisma';
-import { PurchaseInfo, UserRetriever } from '@freemius/sdk';
+import { PurchaseInfo, SubscriptionEntity, UserRetriever } from '@freemius/sdk';
 import { User, UserFsEntitlement } from '@generated/prisma';
 import { freemius } from './freemius';
 import { auth } from './auth';
@@ -74,6 +74,40 @@ export const getFsUser: UserRetriever = async () => {
 
     return freemius.entitlement.getFsUser(entitlement, email);
 };
+
+export async function deleteEntitlement(fsLicenseId: string): Promise<void> {
+    await prisma.userFsEntitlement.delete({ where: { fsLicenseId: fsLicenseId } });
+}
+
+export async function syncEntitlementFromWebhook(fsLicenseId: string): Promise<void> {
+    const purchaseInfo = await freemius.purchase.retrievePurchase(fsLicenseId);
+    if (purchaseInfo) {
+        await processPurchaseInfo(purchaseInfo);
+    }
+}
+
+export async function renewCreditsFromWebhook(fsLicenseId: string): Promise<void> {
+    const purchaseInfo = await freemius.purchase.retrievePurchase(fsLicenseId);
+
+    if (purchaseInfo) {
+        const credits = getEntitledCredits(purchaseInfo);
+
+        const entitlement = await prisma.userFsEntitlement.findUnique({
+            where: { fsLicenseId },
+        });
+
+        if (entitlement && credits > 0) {
+            await addCredits(entitlement.userId, credits);
+        }
+    }
+}
+
+export async function sendRenewalFailureEmail(subscription: SubscriptionEntity): Promise<void> {
+    // This is a placeholder for sending an email to the user about the renewal failure.
+    // You can use your preferred email service here.
+    console.log('Sending renewal failure email for subscription:', subscription);
+    // Example: await sendEmailToUser(subscription.user, 'Renewal failed', 'Your subscription renewal has failed.');
+}
 
 //#endregion
 

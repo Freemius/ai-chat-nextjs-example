@@ -1,11 +1,9 @@
 import AppMain, { AppContent } from '@/components/app-main';
 import { auth } from '@/lib/auth';
-import { getCredits, getUserEntitlement } from '@/lib/user-entitlement';
+import { getCredits } from '@/lib/user-entitlement';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { ErrorBoundary } from '@/components/error';
-import { freemius } from '@/lib/freemius';
-import AppCheckoutProvider from '@/components/app-checkout-provider';
 import Credits from './credits';
 
 export default async function CreditsPage() {
@@ -17,21 +15,13 @@ export default async function CreditsPage() {
         redirect('/login');
     }
 
-    const entitlement = await getUserEntitlement(session.user.id);
     const credits = await getCredits(session.user.id);
-
-    const checkout = await freemius.checkout.create({
-        user: session?.user,
-        isSandbox: process.env.NODE_ENV !== 'production',
-    });
 
     return (
         <AppMain title="Credits & Topups" isLoggedIn={true}>
             <AppContent>
                 <ErrorBoundary>
-                    <AppCheckoutProvider checkout={checkout.serialize()}>
-                        <Credits credits={credits} hasSubscription={!!entitlement} />
-                    </AppCheckoutProvider>
+                    <Credits credits={credits} />
                 </ErrorBoundary>
             </AppContent>
         </AppMain>

@@ -5,7 +5,7 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { ErrorBoundary } from '@/components/error';
 import { CustomerPortal } from '@/react-starter/components/customer-portal';
-import CheckoutWithConfettiProvider from '@/components/checkout-with-confetti-provider';
+import AppCheckoutProvider from '@/components/app-checkout-provider';
 
 export default async function Billing() {
     const session = await auth.api.getSession({
@@ -25,9 +25,9 @@ export default async function Billing() {
         <AppMain title="Billing" isLoggedIn={true}>
             <AppContent>
                 <ErrorBoundary>
-                    <CheckoutWithConfettiProvider checkout={checkout.serialize()}>
+                    <AppCheckoutProvider checkout={checkout.serialize()}>
                         <CustomerPortal endpoint={process.env.NEXT_PUBLIC_APP_URL! + '/api/portal'} />
-                    </CheckoutWithConfettiProvider>
+                    </AppCheckoutProvider>
                 </ErrorBoundary>
             </AppContent>
         </AppMain>

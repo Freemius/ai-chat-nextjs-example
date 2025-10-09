@@ -5,7 +5,7 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { ErrorBoundary } from '@/components/error';
 import { freemius } from '@/lib/freemius';
-import CheckoutWithConfettiProvider from '@/components/checkout-with-confetti-provider';
+import AppCheckoutProvider from '@/components/app-checkout-provider';
 import Credits from './credits';
 
 export default async function CreditsPage() {
@@ -29,9 +29,9 @@ export default async function CreditsPage() {
         <AppMain title="Credits & Topups" isLoggedIn={true}>
             <AppContent>
                 <ErrorBoundary>
-                    <CheckoutWithConfettiProvider checkout={checkout.serialize()}>
+                    <AppCheckoutProvider checkout={checkout.serialize()}>
                         <Credits credits={credits} hasSubscription={!!entitlement} />
-                    </CheckoutWithConfettiProvider>
+                    </AppCheckoutProvider>
                 </ErrorBoundary>
             </AppContent>
         </AppMain>

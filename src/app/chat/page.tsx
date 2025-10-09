@@ -3,7 +3,7 @@ import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { freemius } from '@/lib/freemius';
 import { examples } from '@/lib/ai';
-import CheckoutWithConfettiProvider from '@/components/checkout-with-confetti-provider';
+import AppCheckoutProvider from '@/components/app-checkout-provider';
 import AiApp from './ai-app';
 
 export default async function Dashboard() {
@@ -18,9 +18,9 @@ export default async function Dashboard() {
 
     return (
         <AppMain title="New Chat" isLoggedIn={!!session}>
-            <CheckoutWithConfettiProvider checkout={checkout.serialize()}>
+            <AppCheckoutProvider checkout={checkout.serialize()}>
                 <AiApp examples={examples} />
-            </CheckoutWithConfettiProvider>
+            </AppCheckoutProvider>
         </AppMain>
     );
 }

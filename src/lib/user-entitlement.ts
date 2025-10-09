@@ -28,7 +28,14 @@ export async function processPurchaseInfo(fsPurchase: PurchaseInfo): Promise<voi
         return;
     }
 
-    const credit = await processEntitlementFromPurchase(user, fsPurchase);
+    const credit = await getCreditsForUserPurchase(user, fsPurchase);
+
+    // Save purchase info in our DB
+    await prisma.userFsEntitlement.upsert({
+        where: { fsLicenseId: fsPurchase.licenseId },
+        create: fsPurchase.toEntitlementRecord({ userId: user.id }),
+        update: fsPurchase.toEntitlementRecord(),
+    });
 
     if (credit > 0) {
         await addCredits(user.id, credit);
@@ -87,7 +94,7 @@ export async function renewCreditsFromWebhook(fsLicenseId: string): Promise<void
     const purchaseInfo = await freemius.purchase.retrievePurchase(fsLicenseId);
 
     if (purchaseInfo) {
-        const credits = getCreditsForPurchase(purchaseInfo);
+        const credits = getEntitledCredits(purchaseInfo);
 
         const entitlement = await prisma.userFsEntitlement.findUnique({
             where: { fsLicenseId },
@@ -158,13 +165,13 @@ const pricingToResourceMap: Record<string, keyof typeof resourceRecord> = {
     [process.env.FREEMIUS_PRICING_ID_TOPUP_10000!]: 'topup_10000',
 };
 
-function getCreditsForPurchase(fsPurchase: PurchaseInfo): number {
+function getEntitledCredits(fsPurchase: PurchaseInfo): number {
     const credit = resourceRecord[pricingToResourceMap[fsPurchase.pricingId]] ?? 0;
 
     return fsPurchase.isAnnual() ? credit * 12 : credit;
 }
 
-async function processEntitlementFromPurchase(user: User, fsPurchase: PurchaseInfo): Promise<number> {
+async function getCreditsForUserPurchase(user: User, fsPurchase: PurchaseInfo): Promise<number> {
     let credit = 0;
 
     const isExisting = await prisma.userFsEntitlement.findUnique({
@@ -174,16 +181,8 @@ async function processEntitlementFromPurchase(user: User, fsPurchase: PurchaseIn
     });
 
     if (!isExisting) {
-        credit = getCreditsForPurchase(fsPurchase);
+        credit = getEntitledCredits(fsPurchase);
     }
-
-    await prisma.userFsEntitlement.upsert({
-        where: {
-            fsLicenseId: fsPurchase.licenseId,
-        },
-        update: fsPurchase.toEntitlementRecord(),
-        create: fsPurchase.toEntitlementRecord({ userId: user.id }),
-    });
 
     return credit;
 }

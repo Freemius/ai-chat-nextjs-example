@@ -27,7 +27,8 @@ export async function POST(request: Request) {
                 code: 'no_active_purchase',
                 message: 'You do not have an active license to use this feature.',
             },
-            { status: 403 }
+            // 402 Payment Required
+            { status: 402 }
         );
     }
 
@@ -37,7 +38,7 @@ export async function POST(request: Request) {
                 code: 'insufficient_credits',
                 message: 'You do not have enough credits to use this feature.',
             },
-            { status: 403 }
+            { status: 402 }
         );
     }
 

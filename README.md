@@ -23,7 +23,7 @@ _Supports both recurring subscriptions and one-time credit top-ups for maximum m
 
 - Follow the [official documentation](https://freemius.com/help/documentation/saas-sdk/framework/nextjs/) for the most
   up-to-date instructions.
-- Recording link will be updated soon.
+- Watch the webinar on our [YouTube channel](https://www.youtube.com/watch?v=4rEjDf8cdv4).
 - The code changes can be tracked via [this pull request](https://github.com/Freemius/ai-chat-nextjs-example/pull/2).
 
 ![Demo Screenshot](./awesome-ai-chat-app.png)

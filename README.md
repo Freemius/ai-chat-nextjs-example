@@ -127,5 +127,6 @@ Here's a one-click deployment option using Vercel:
 
 For hosting the database you can use [Supabase](https://supabase.com/database) or any other Postgres hosting provider.
 
-For more details on deployment, check out the
-[official documentation](https://nextjs.org/docs/app/getting-started/deploying).
+For more details on deployment, check out the official documentations from
+[vercel](https://nextjs.org/docs/app/getting-started/deploying) and
+[prisma](https://www.prisma.io/docs/orm/prisma-client/deployment/serverless/deploy-to-vercel#build-configuration).

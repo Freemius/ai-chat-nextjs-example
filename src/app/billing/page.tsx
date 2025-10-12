@@ -1,14 +1,13 @@
 import AppMain, { AppContent } from '@/components/app-main';
 import { auth } from '@/lib/auth';
-import { getCredits } from '@/lib/user-entitlement';
+import { freemius } from '@/lib/freemius';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { ErrorBoundary } from '@/components/error';
-import Credits from './credits';
-import { freemius } from '@/lib/freemius';
+import { CustomerPortal } from '@/react-starter/components/customer-portal';
 import AppCheckoutProvider from '@/components/app-checkout-provider';
 
-export default async function CreditsPage() {
+export default async function Billing() {
     const session = await auth.api.getSession({
         headers: await headers(),
     });
@@ -17,19 +16,17 @@ export default async function CreditsPage() {
         redirect('/login');
     }
 
-    const credits = await getCredits(session.user.id);
-
     const checkout = await freemius.checkout.create({
         user: session?.user,
         isSandbox: process.env.NODE_ENV !== 'production',
     });
 
     return (
-        <AppMain title="Credits & Topups" isLoggedIn={true}>
+        <AppMain title="Billing" isLoggedIn={true}>
             <AppContent>
                 <ErrorBoundary>
                     <AppCheckoutProvider checkout={checkout.serialize()}>
-                        <Credits credits={credits} />
+                        <CustomerPortal endpoint={process.env.NEXT_PUBLIC_APP_URL! + '/api/portal'} />
                     </AppCheckoutProvider>
                 </ErrorBoundary>
             </AppContent>
